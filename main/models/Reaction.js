@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb/lib');
 const { Schema, model } = require('mongoose');
+const dateFormat = (date) => new Date(date).toLocaleString();
 
 exports.reactionSchema = new Schema({
   reactionId: {
@@ -17,7 +18,8 @@ exports.reactionSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    get: timestamp => dateFormat(timestamp),
   },
 });
 
