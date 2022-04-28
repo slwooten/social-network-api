@@ -1,16 +1,21 @@
 const User = require('../models/User');
 
 module.exports = {
+  // gets all users
   getUsers(req, res) {
     User.find()
       .then((users) => res.json(users))
       .catch((err) => res.status(500).json(err));
   },
+
+  // creates new user
   createUser(req, res) {
     User.create(req.body)
       .then((userData) => res.json(userData))
       .catch((err) => res.status(500).json(err));
   },
+
+  // gets single user
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
       .then((user) =>
@@ -20,6 +25,8 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+
+  // updates single user
   updateUser(req, res) {
     User.updateOne(
       {
@@ -32,11 +39,15 @@ module.exports = {
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
+
+  // deletes user
   deleteUser(req, res) {
     User.deleteOne({ 'userId': req.params.userId })
       .then(() => res.json({ message: 'User deleted.' }))
       .catch((err) => res.status(500).json(err));
   },
+
+  // adds friend
   addFriend(req, res) {
     User.updateOne(
       {
@@ -49,16 +60,16 @@ module.exports = {
       .then(() => res.json({ message: 'Added Friend.' }))
       .catch((err) => res.status(500).json(err));
   },
-  // deleteFriend(req, res) {
-  //   User.updateOne(
-  //     {
-  //       'userId': req.params.userId
-  //     },
-  //     {
-  //       $pull: { friends: req.params.friendId }
-  //     }
-  //   )
-  //     .then(() => res.json({ message: 'Removed Friend.' }))
-  //     .catch((err) => res.status(500).json(err));
-  // },
+  deleteFriend(req, res) {
+    User.deleteOne(
+      {
+        'userId': req.params.userId
+      },
+      {
+        $pull: { friends: req.params.friendId }
+      }
+    )
+      .then(() => res.json({ message: 'Removed Friend.' }))
+      .catch((err) => res.status(500).json(err));
+  },
 }
